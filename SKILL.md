@@ -1,3 +1,9 @@
+---
+name: architecture
+description: >
+  A lightweight, fully local skill. No servers, no API keys, no data leaves the machine. Everything runs as Python over the files the rep already has. Use this skill when working with architecture tasks or workflows.
+---
+
 # Architecture — HubSpot Import Formatter
 
 A lightweight, fully local skill. No servers, no API keys, no data leaves the machine.
@@ -33,7 +39,7 @@ so they can never disagree on property names or valid values — that's what gua
 no mis-mapping errors on import. `industry_resolver.py` layers semantic industry matching
 on top of it.
 
-Secrets live **outside** this folder at `~/.{{COMPANY_NAME}}/hubspot.env` (git-ignored) so a packaged
+Secrets live **outside** this folder at `~/.Enterprise Platform/hubspot.env` (git-ignored) so a packaged
 skill never ships a token.
 
 ## Data flow
@@ -56,7 +62,7 @@ flowchart TD
 
     PIPE --> J[Exact-template sheet + CSV<br/>pristine, import-ready]
     PIPE --> K[Extended sheet<br/>+ leftover cols + Issues, flagged rows highlighted]
-    PIPE --> L[Append run to KPI ledger<br/>~/.{{COMPANY_NAME}}/hubspot_import_ledger.csv]
+    PIPE --> L[Append run to KPI ledger<br/>~/.Enterprise Platform/hubspot_import_ledger.csv]
 
     J --> M[HubSpot import wizard<br/>imported under Batch ID name]
     J --> U[hubspot_upload.py<br/>optional direct push]
@@ -75,7 +81,7 @@ validates enum/numeric fields, then writes via the dedupe-correct path per objec
 search-then-update/create by domain** (domain usually isn't flagged unique, so direct
 upsert is rejected). It then creates a static MANUAL list per type, adds the records, and
 returns the link. Batches of 100 with per-record fallback so one bad row can't fail the
-import. Token comes from `~/.{{COMPANY_NAME}}/hubspot.env`; uploads run as the token owner.
+import. Token comes from `~/.Enterprise Platform/hubspot.env`; uploads run as the token owner.
 
 ## Design decisions (and why)
 
@@ -102,7 +108,7 @@ import. Token comes from `~/.{{COMPANY_NAME}}/hubspot.env`; uploads run as the t
 
 ## KPI layer
 
-- **Local ledger** (`~/.{{COMPANY_NAME}}/hubspot_import_ledger.csv`, override via `{{COMPANY_PREFIX}}_IMPORT_LEDGER`):
+- **Local ledger** (`~/.Enterprise Platform/hubspot_import_ledger.csv`, override via `{{COMPANY_PREFIX}}_IMPORT_LEDGER`):
   append-only, one row per run — batch ID, timestamp, operator, counts, flagged counts.
 - **`kpi_report.py`** aggregates it: total imports, rows prepared, data-quality rate,
   breakdown by operator and month.
